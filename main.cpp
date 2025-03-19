@@ -8,49 +8,35 @@
 using namespace std;
 
 // Переопределение операторов + и += для всех типов контейнеров с простым типом данных
-template <template <typename...> class Container, typename T>
+template <template <typename> class Container, typename T>
 Container<T> operator+(const Container<T>& a, const Container<T>& b) {
     Container<T> result(a);
     result.insert(result.end(), b.begin(), b.end());
     return result;
 }
 
-template <template <typename...> class Container, typename T>
+template <template <typename> class Container, typename T>
 Container<T>& operator+=(Container<T>& a, const Container<T>& b) {
     a.insert(a.end(), b.begin(), b.end());
     return a;
 }
 
-// Переопределение операторов + и += для map
-template <typename K, typename V>
-map<K, V> operator+(const map<K, V>& a, const map<K, V>& b) {
-    map<K, V> result(a);
+// Переопределение операторов + и += для контейнеров, хранящих данные в парах
+template <template <typename, typename> class Container, typename K, typename V>
+Container<K, V> operator+(const Container<K, V>& a, const Container<K, V>& b) {
+    Container<K, V> result(a);
     result.insert(b.begin(), b.end());
     return result;
 }
 
-template <typename K, typename V>
-    map<K, V>& operator+=(map<K, V>& a, const map<K, V>& b) {
-    a.insert(b.begin(), b.end());
-    return a;
-}
-
-// Переопределение операторов + и += для set
-template <typename T>
-set<T> operator+(const set<T>& a, const set<T>& b) {
-    set<T> result(a);
-    result.insert(b.begin(), b.end());
-    return result;
-}
-
-template <typename T>
-set<T>& operator+=(set<T>& a, const set<T>& b) {
+template <template <typename, typename> class Container, typename K, typename V>
+    Container <K, V>& operator+=(Container<K, V>& a, const Container<K, V>& b) {
     a.insert(b.begin(), b.end());
     return a;
 }
 
 // Вывод элементов контейнера с простым типом данных (для set тоже работает)
-template <template <typename...> class Container, typename T>
+template <template <typename> class Container, typename T>
 void print(const string& message, const Container<T>& container) {
     cout << message;
     for (const auto& elem : container)
@@ -58,7 +44,7 @@ void print(const string& message, const Container<T>& container) {
     cout << endl;
 }
 
-// Вывод элементов контейнера map
+// Вывод элементов контейнеров, хранящих данные в парах
 template <typename K, typename V>
 void print(const string& message, const map<K, V>& container) {
     cout << message;
